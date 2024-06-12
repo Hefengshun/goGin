@@ -12,7 +12,7 @@ var str string = "123"
 //func main() {
 //	name(&str)
 //	println(str)
-//}
+//}1111
 
 func name(data string) { //按值传递
 	data += "12"
