@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"ginDemo/config"
-	"ginDemo/model"
+	"ginDemo/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -54,6 +54,6 @@ func InitDB() *gorm.DB {
 		panic("Error to Db connection, err: " + err.Error())
 	}
 	//这个是gorm自动创建数据表的函数。它会自动在数据库中创建一个名为users的数据表
-	_ = db.AutoMigrate(&model.Users{}) // 可以使用逗号分割 根据表的结构体创建多个表
+	_ = db.AutoMigrate(&models.Users{}) // 可以使用逗号分割 根据表的结构体创建多个表
 	return db
 }

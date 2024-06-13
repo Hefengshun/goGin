@@ -12,7 +12,7 @@ import (
 func mayHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("ces", "123")
-		c.Next() // 放行
+		c.Next() // 放行之后会把后面的东西执行完 再回来执行剩余代码
 		//c.Abort() //阻止 中断
 
 	}
@@ -25,8 +25,8 @@ type User struct {
 	Age  string
 }
 
-// DefaultRouter 外部使用方法首字母必须大写公有方法，  内部使用方法首字母小写
-func DefaultRouter(ginServer *gin.Engine) {
+// DemoRouter 外部使用方法首字母必须大写公有方法，  内部使用方法首字母小写
+func DemoRouter(ginServer *gin.Engine) {
 	//ginServer.Use(mayHandler()) // 全局注册中间件
 	// 定义路由  进入这个方法前就会进入这个mayHandler中间件  这属于单个中间件
 	ginServer.GET("/ping", mayHandler(), func(c *gin.Context) {

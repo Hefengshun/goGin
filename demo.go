@@ -10,7 +10,7 @@ var str string = "123"
 //}
 //
 //func main() {
-//	name(&str)
+//	name(&str)  想改变结构体调用的时候才穿指针
 //	println(str)
 //}
 
