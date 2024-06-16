@@ -1,7 +1,11 @@
 package global
 
-import "gorm.io/gorm"
+import (
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
 var (
-	DB *gorm.DB
+	DB        *gorm.DB
+	GinServer *gin.Engine
 )

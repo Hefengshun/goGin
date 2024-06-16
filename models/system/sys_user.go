@@ -1,4 +1,4 @@
-package models
+package system
 
 import "ginDemo/global"
 
@@ -9,6 +9,7 @@ type Users struct {
 	Password string
 }
 
+// 这里不能更改这个结构体 （数据库表）所有不带指针 TableName 方法本质上是一个只读操作 返回表明
 func (Users) TableName() string {
 	return "sys_users"
 }
