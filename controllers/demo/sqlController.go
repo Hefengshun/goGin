@@ -23,11 +23,15 @@ func (_this *SqlController) ReturnOneForm(c *gin.Context) {
 func (_this *SqlController) CreateOneData(c *gin.Context) {
 	name := c.Query("name")
 	password := c.Query("password")
-	user := demo.SysDemo{
-		Name:     name,
-		Password: password,
-	}
-	ok := global.DB.Create(&user)
+	//user := demo.SysDemo{
+	//	Name:     name,
+	//	Password: password,
+	//}
+	//ok := global.DB.Create(&user)
+	ok := global.DB.Model(&demo.SysDemo{}).Create(map[string]interface{}{
+		"Name":     name,
+		"Password": password,
+	})
 	if ok.Error == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "CreateOneData  success",
@@ -63,8 +67,14 @@ func (_this *SqlController) SelectIdData(c *gin.Context) {
 	}
 
 	// 创建 SysDemo 实例并查询数据库
-	user := demo.SysDemo{Id: id}
-	result := global.DB.Find(&user)
+	//user := demo.SysDemo{}
+	//result := global.DB.Find(&user)
+
+	user := map[string]interface{}{
+		"id": id,
+	}
+	result := global.DB.Model(&demo.SysDemo{}).Find(&user)
+	//result := global.DB.Model(demo.SysDemo{}).Select("id").Where("id = ?", id)
 
 	// 检查是否有错误
 	if result.Error != nil {
@@ -88,4 +98,31 @@ func (_this *SqlController) SelectIdData(c *gin.Context) {
 		"data":    user,
 	})
 
+}
+
+func (_this *SqlController) SelectNameData(c *gin.Context) {
+	name := c.Query("name")
+	usersList := []demo.SysDemo{}
+	result := global.DB.Where("name = ?", name).Find(&usersList)
+	if result.Error != nil {
+		c.JSON(http.StatusOK, gin.H{"error": result.Error.Error()})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "SelectNameData success",
+			"api":     c.Request.RequestURI,
+			"data":    usersList,
+		})
+	}
+}
+
+func (_this *SqlController) SelectKeyToArray(c *gin.Context) {
+	name := c.PostFormArray("name")
+	c.JSON(http.StatusOK, gin.H{
+		"message": "SelectNameData success",
+		"api":     c.Request.RequestURI,
+		"data":    name,
+	})
+}
+func (_this *SqlController) Redirect(c *gin.Context) {
+	c.Redirect(http.StatusMovedPermanently, "http://www.baidu.com/")
 }

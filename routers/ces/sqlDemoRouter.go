@@ -18,6 +18,9 @@ func (_this *SqlDemoRouter) InitSqlDemo(ginServer *gin.Engine) {
 		sqlDemoRouter.GET("/deleteonedata", demoControllers.DeleteOneData)
 		sqlDemoRouter.GET("/selectiddata", demoControllers.SelectIdData)
 		sqlDemoRouter.POST("/login", demoControllers.LoginDemo)
+		sqlDemoRouter.GET("/selectnamedata", demoControllers.SelectNameData)
+		sqlDemoRouter.POST("/selectkeytoarray", demoControllers.SelectKeyToArray)
+		sqlDemoRouter.GET("/redirect", demoControllers.Redirect)
 
 	}
 }

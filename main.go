@@ -4,10 +4,15 @@ import (
 	"ginDemo/global"
 	"ginDemo/initialize"
 	"github.com/gin-gonic/gin"
+	"io"
+	"os"
 )
 
 func main() {
 	global.DB = initialize.InitDB()
+	// 如果需要同时将日志写入文件和控制台，请使用以下代码。
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 	// 切换到 release 模式
 	gin.SetMode(gin.ReleaseMode)
 	ginServer := gin.Default() //这里面已经加了 Logger(), Recovery() 默认是中间件的F12进去看 不想用就engine := New()手动创建路由引擎

@@ -11,7 +11,7 @@ import (
 type UploadController struct {
 }
 
-func (UploadController) Unifile(c *gin.Context) {
+func (UploadController) UniFile(c *gin.Context) {
 	file, err := c.FormFile("file") //取的是form Data的数据
 	if err == nil {
 		fmt.Println(file.Filename)
@@ -45,7 +45,7 @@ func (UploadController) Unifile(c *gin.Context) {
 	}
 }
 
-func (UploadController) Multifile(c *gin.Context) {
+func (UploadController) MultiFile(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.JSON(200, gin.H{
