@@ -1,2 +1,6 @@
-[GIN] 2024/06/20 - 20:42:02 | 200 |    5.817542ms |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
-[GIN] 2024/06/20 - 20:42:03 | 200 |    4.302916ms |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
+[GIN] 2024/06/22 - 21:02:06 | 404 |     153.875µs |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
+[GIN] 2024/06/22 - 21:02:43 | 404 |      23.875µs |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
+[GIN] 2024/06/22 - 21:04:40 | 404 |      35.792µs |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
+[GIN] 2024/06/22 - 21:04:59 | 200 |      85.834µs |       127.0.0.1 | GET      "/demo/selectIdData?id=2"
+[GIN] 2024/06/22 - 21:05:11 | 404 |       61.75µs |       127.0.0.1 | GET      "/demo/selectiddata?id=2"
+[GIN] 2024/06/22 - 21:05:15 | 404 |      46.875µs |       127.0.0.1 | GET      "/demo/selectiddata?id=2"

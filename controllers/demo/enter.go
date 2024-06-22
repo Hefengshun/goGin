@@ -1,6 +1,6 @@
 package demo
 
-type DemoControllers struct {
+type ControllerGroup struct {
 	SqlController
 	UserController
 }

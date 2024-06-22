@@ -73,8 +73,8 @@ func (_this *SqlController) SelectIdData(c *gin.Context) {
 	user := map[string]interface{}{
 		"id": id,
 	}
-	result := global.DB.Model(&demo.SysDemo{}).Find(&user)
-	//result := global.DB.Model(demo.SysDemo{}).Select("id").Where("id = ?", id)
+	//result := global.DB.Model(&demo.SysDemo{}).Find(&user)
+	result := global.DB.Model(&demo.SysDemo{}).Select("id").Where("id = ?", id)
 
 	// 检查是否有错误
 	if result.Error != nil {
