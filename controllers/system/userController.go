@@ -1,10 +1,12 @@
 package system
 
 import (
-	"ginDemo/global"
-	"ginDemo/models/demo"
+	"fmt"
+	"ginDemo/models/common/response"
+	"ginDemo/models/system"
+	stytemReq "ginDemo/models/system/request"
+	stytemRes "ginDemo/models/system/response"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 //func SignUp(c *gin.Context) {
@@ -28,64 +30,70 @@ import (
 
 type UserController struct{}
 
-func (_this *UserController) Demo(c *gin.Context) {
-	name, ok := c.Get("name") //这里忽略了name的空接口类型
-	if ok {
+func (_this *UserController) SignUp(c *gin.Context) {
+	var l stytemReq.SignUp
+	err := c.ShouldBindJSON(&l)
+	if err != nil {
 		c.JSON(200, gin.H{
-			"name": name,
+			"message": "Login User",
+			"data":    l,
+			"err":     err.Error(),
+		})
+		return
+	}
+	user := &system.SysUser{
+		Username: l.Name,
+		Password: l.Password,
+	}
+	userInfo, err := userService.SignUp(*user)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"message": "Login User",
+			"err":     err.Error(),
+			"data":    userInfo,
 		})
 	} else {
 		c.JSON(200, gin.H{
-			"message": "Logout User",
+			"message": "Login User",
+			"data":    userInfo,
+			"success": "注册成功",
 		})
 	}
-
-}
-
-func (_this *UserController) SignUp(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "Login User",
-	})
 }
 
 func (_this *UserController) Login(c *gin.Context) {
-	type Login struct {
-		Name     string `json:"name"`                        // 用户名
-		Password string `json:"password" binding:"required"` // 密码 结构体绑定校验
-	}
-	user := demo.SysDemo{}
-	reqUser := new(Login)
-	//userService.Login(&reqUser)
-	if err := c.ShouldBind(reqUser); err != nil {
+	var reqUser stytemReq.Login
+	if err := c.ShouldBind(&reqUser); err != nil {
 		c.JSON(200, gin.H{
 			"code": 200,
 			"url":  c.Request.RequestURI,
-			"data": "密码未填写！",
+			"err":  err.Error(),
 		})
 		return
 	}
-	c.ShouldBind(&reqUser) //c.ShouldBind 使用了 c.Request.Body json数据 绑定到结构体里面 但是不可绑定多个结构体多次绑定使用c.ShouldBindBodyWith
-	result := global.DB.Where("name = ? and password = ?", reqUser.Name, reqUser.Password).Find(&user)
+	user := &system.SysUser{
+		Username: reqUser.Name,
+		Password: reqUser.Password,
+	}
+	// 打印指针
+	fmt.Printf("user pointer: %p\n", user)
 
-	/*
-		name := c.PostForm("name")         //取出的是form-data数据
-		password := c.PostForm("password") //取出的是form-data数据
-		result := global.DB.Where("name = ? AND password = ?", name, password).Find(&user)
-	*/
+	// 打印指针指向的值
+	fmt.Printf("user value: %+v\n", user)
 
-	if result.RowsAffected == 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"code": 200,
-			"url":  c.Request.RequestURI,
-			"data": "登录失败！未查找到数据",
-		})
+	// 直接打印指针，会自动解引用
+	fmt.Println("user:", user)
+
+	userInfo, err := userService.Login(user)
+	//fmt.Println(userInfo, *userInfo)
+
+	if err != nil {
+		response.FailWithMessage("用户不存在或者密码错误", c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
-		"url":  c.Request.RequestURI,
-		"data": user,
-	})
+	returnUserInfo := &stytemRes.Login{User: *userInfo, Token: "token"} // *userInfo 之所以要传这个 因为那边接受的是值
+
+	response.OkWithDetailed(returnUserInfo, "登录成功！", c)
 }
 
 func (_this *UserController) Logout(c *gin.Context) {

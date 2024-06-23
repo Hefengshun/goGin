@@ -23,6 +23,7 @@ func (_this *UserController) LoginDemo(c *gin.Context) {
 			"code": 200,
 			"url":  c.Request.RequestURI,
 			"data": "密码未填写！",
+			"err":  err.Error(),
 		})
 		return
 	}

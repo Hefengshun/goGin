@@ -17,11 +17,10 @@ func (_this *SqlDemoRouter) InitSqlDemo(ginServer *gin.Engine) {
 		sqlDemoRouter.GET("returnoneform", (&demo.SqlController{}).ReturnOneForm)
 		sqlDemoRouter.GET("/createonedata", demoControllers.CreateOneData)
 		sqlDemoRouter.GET("/deleteonedata", demoControllers.DeleteOneData)
-		sqlDemoRouter.GET("/selectIdData", demoControllers.SelectIdData)
+		sqlDemoRouter.GET("/selectiddata", demoControllers.SelectIdData)
 		sqlDemoRouter.POST("/login", demoControllers.LoginDemo)
 		sqlDemoRouter.GET("/selectnamedata", demoControllers.SelectNameData)
 		sqlDemoRouter.POST("/selectkeytoarray", demoControllers.SelectKeyToArray)
 		sqlDemoRouter.GET("/redirect", demoControllers.Redirect)
-
 	}
 }

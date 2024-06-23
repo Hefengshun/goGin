@@ -16,7 +16,6 @@ func (_this *UserRouter) InitUserRouter(ginServer *gin.Engine) {
 	//userRouter := ginServer.Group("/user","xxx中间件")  方法1
 	//userRouter.Use("xxx中间件","xxx中间件2")   方法2
 	{
-		userRouter.POST("/demo", userController.Demo)
 		userRouter.POST("/signup", userController.SignUp)
 		userRouter.POST("/login", userController.Login)
 		userRouter.POST("/logout", userController.Logout)

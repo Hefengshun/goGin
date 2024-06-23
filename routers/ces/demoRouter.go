@@ -29,7 +29,11 @@ type User struct {
 type DemoRouter struct{}
 
 // 在DemoRouter扩展方法InitDemoRouter 用s *DemoRouter接受 则不会复制DemoRouter结构体 而如果直接传入DemoRouter则会复制一份虽然都可以
-// 尽管 InitDemoRouter 方法没有修改 DemoRouter 结构体的状态，使用指针接收者 (*DemoRouter) 依然是推荐的做法。这样可以确保代码的一致性、优化性能以及方便将来的扩展和维护。
+// 尽管 InitDemoRouter 方法没有修改 DemoRouter 结构体的状态，
+//使用指针接收者 (*DemoRouter) 依然是推荐的做法。这样可以确保代码的一致性、优化性能以及方便将来的扩展和维护。
+// 一个指针变量指向了一个值的内存地址。 反过来 一个变量的的内存地址 是 指针类型
+//interface{} 是一种万能类型，可以接受任何类型的值，包括指针类型、结构体类型、基本类型等
+
 func (s *DemoRouter) InitDemoRouter(ginServer *gin.Engine) {
 	//ginServer.Use(mayHandler()) // 全局注册中间件
 	// 定义路由  进入这个方法前就会进入这个mayHandler中间件  这属于单个中间件
