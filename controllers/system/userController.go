@@ -6,6 +6,7 @@ import (
 	"ginDemo/models/system"
 	stytemReq "ginDemo/models/system/request"
 	stytemRes "ginDemo/models/system/response"
+	"ginDemo/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -77,22 +78,22 @@ func (_this *UserController) Login(c *gin.Context) {
 	}
 	// 打印指针
 	fmt.Printf("user pointer: %p\n", user)
-
 	// 打印指针指向的值
 	fmt.Printf("user value: %+v\n", user)
-
 	// 直接打印指针，会自动解引用
 	fmt.Println("user:", user)
-
 	userInfo, err := userService.Login(user)
 	//fmt.Println(userInfo, *userInfo)
-
 	if err != nil {
 		response.FailWithMessage("用户不存在或者密码错误", c)
 		return
 	}
-	returnUserInfo := &stytemRes.Login{User: *userInfo, Token: "token"} // *userInfo 之所以要传这个 因为那边接受的是值
-
+	token, err := utils.ReleaseToken(*userInfo)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	returnUserInfo := &stytemRes.Login{User: *userInfo, Token: token} // *userInfo 之所以要传这个 因为那边接受的是值
 	response.OkWithDetailed(returnUserInfo, "登录成功！", c)
 }
 
