@@ -16,18 +16,17 @@ const (
 //)
 
 type Response struct {
-	Code int         `json:"start"`
-	Data interface{} `json:"data"`
-	Msg  string      `json:"msg"`
+	State int         `json:"state"`
+	Data  interface{} `json:"data"`
+	Msg   string      `json:"msg"`
 }
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {
 	c.JSON(http.StatusOK, Response{
-		Code: code,
-		Data: data,
-		Msg:  msg,
+		State: code,
+		Data:  data,
+		Msg:   msg,
 	})
-
 }
 
 func OkWithDetailed(data interface{}, msg string, c *gin.Context) {

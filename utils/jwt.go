@@ -8,7 +8,7 @@ import (
 
 // 定义秘钥
 var jwtKey = []byte("123456")
-var NoVerify = []interface{}{"/user/login"}
+var NoVerify = []interface{}{"/api/login", "/api/signup"}
 
 type Claims struct {
 	UserId   uint
@@ -21,7 +21,7 @@ func ReleaseToken(user system.SysUser) (string, error) {
 	expirationTime := time.Now().Add(3 * time.Minute) //token的有效期是3分钟
 	claims := &Claims{
 		UserId:   user.ID,
-		UserName: user.Username,
+		UserName: user.UserName,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(), //token的有效期
 			IssuedAt:  time.Now().Unix(),     //token发放的时间

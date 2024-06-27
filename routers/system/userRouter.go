@@ -12,7 +12,7 @@ type UserRouter struct{}
 func (_this *UserRouter) InitUserRouter(ginServer *gin.Engine) {
 	userController := &system.UserController{} //因为是指针接受者的方法 所有使用时要&引用地址 引用的地址上面挂载了这个方法
 	//uc.Demo ｜｜ (&user.UserController{}).Demo // 这可以正常工作
-	userRouter := ginServer.Group("/user", middlewares.PrintOne)
+	userRouter := ginServer.Group("/api", middlewares.PrintOne)
 	//userRouter := ginServer.Group("/user","xxx中间件")  方法1
 	//userRouter.Use("xxx中间件","xxx中间件2")   方法2
 	{

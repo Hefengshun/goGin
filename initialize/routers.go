@@ -9,6 +9,7 @@ import (
 func InitRouters() {
 	//ginServer.Use(xxx,xxx)里面可以配置多个全局中间件 当然路由组的中间件也可以配置
 	//**** 中间件如果使用了携程 多线程 go XXX 里面的c *gin.Context 要拷贝使用
+	global.GinServer.Use(middlewares.Cors())
 	global.GinServer.Use(middlewares.HandleRouter)
 	global.GinServer.Use(middlewares.JWTAuth())
 

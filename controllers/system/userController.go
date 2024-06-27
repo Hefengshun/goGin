@@ -43,37 +43,25 @@ func (_this *UserController) SignUp(c *gin.Context) {
 		return
 	}
 	user := &system.SysUser{
-		Username: l.Name,
+		UserName: l.UserName,
 		Password: l.Password,
 	}
 	userInfo, err := userService.SignUp(*user)
 	if err != nil {
-		c.JSON(200, gin.H{
-			"message": "Login User",
-			"err":     err.Error(),
-			"data":    userInfo,
-		})
+		response.FailWithMessage(err.Error(), c)
 	} else {
-		c.JSON(200, gin.H{
-			"message": "Login User",
-			"data":    userInfo,
-			"success": "注册成功",
-		})
+		response.OkWithDetailed(userInfo, "注册成功", c)
 	}
 }
 
 func (_this *UserController) Login(c *gin.Context) {
 	var reqUser stytemReq.Login
 	if err := c.ShouldBind(&reqUser); err != nil {
-		c.JSON(200, gin.H{
-			"code": 200,
-			"url":  c.Request.RequestURI,
-			"err":  err.Error(),
-		})
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	user := &system.SysUser{
-		Username: reqUser.Name,
+		UserName: reqUser.UserName,
 		Password: reqUser.Password,
 	}
 	// 打印指针
