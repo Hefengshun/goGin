@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8088" // Default port if not specified
+	}
+
 	global.DB = initialize.InitDB()
 	// 如果需要同时将日志写入文件和控制台，请使用以下代码。
 	f, _ := os.Create("gin.log")
@@ -23,7 +28,7 @@ func main() {
 	global.GinServer = ginServer
 	initialize.InitRouters()
 	// 正确的监听端口配置
-	if err := ginServer.Run(":8088"); err != nil {
+	if err := ginServer.Run(":" + port); err != nil {
 		panic(err)
 	}
 }

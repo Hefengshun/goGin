@@ -19,10 +19,10 @@ func name(data string) { //按值传递
 	println(&data, "&data 地址已经变化了", data, "data world")
 }
 
-func main() {
-	name(str)
-	println(str, "hello world")
-}
+// func main() {
+// 	name(str)
+// 	println(str, "hello world")
+// }
 
 //总结
 //按值传递：传递的是变量的副本，函数内部的修改不会影响原始变量。

@@ -14,9 +14,9 @@ import (
 func InitDB() *gorm.DB {
 	//前提是你要先在本机用Navicat创建一个名为go_db的数据库
 	configMySql := config.MySql{
-		Host:     "192.168.0.105",
+		Host:     "118.89.198.69",
 		Port:     "3306",
-		Username: "adminAll",
+		Username: "root",
 		Password: "123456",
 		Database: "goGin",
 		Charset:  "utf8",
