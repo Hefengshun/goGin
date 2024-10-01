@@ -14,10 +14,16 @@ import (
 func InitDB() *gorm.DB {
 	//前提是你要先在本机用Navicat创建一个名为go_db的数据库
 	configMySql := config.MySql{
-		Host:     "118.89.198.69",
+		Host:     "192.168.0.105",  //如果这里使用局域网地址，那么在docker中访问的时候，需要使用宿主机的ip地址 ，否则会访问不到，改为使用内网穿透的地址
 		Port:     "3306",
-		Username: "root",
-		Password: "123456",
+		// Host:     "eq315cb2945.vicp.fun", //这里使用的是内网穿透的地址
+		// Port:     "40148",
+		// Username: "root",
+		// Password: "admin123",
+		// Username: "adminAll",
+		// Password: "123456",
+		Username: "macOS",
+		Password: "admin123",
 		Database: "goGin",
 		Charset:  "utf8",
 	}
