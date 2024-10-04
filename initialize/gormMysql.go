@@ -14,18 +14,23 @@ import (
 func InitDB() *gorm.DB {
 	//前提是你要先在本机用Navicat创建一个名为go_db的数据库
 	configMySql := config.MySql{
-		Host: "192.168.0.105", //如果这里使用局域网地址，那么在docker中访问的时候，需要使用宿主机的ip地址 ，否则会访问不到，改为使用内网穿透的地址
-		Port: "3306",
-		// Host:     "eq315cb2945.vicp.fun", //这里使用的是内网穿透的地址
-		// Port:     "40148",
-		// Username: "root",
-		// Password: "admin123",
-		// Username: "adminAll",
-		// Password: "123456",
-		Username: "macOS",
-		Password: "admin123",
-		Database: "goGin",
-		Charset:  "utf8",
+		////Host: "192.168.0.105", //如果这里使用局域网地址，那么在docker中访问的时候，需要使用宿主机的ip地址 ，否则会访问不到，改为使用内网穿透的地址
+		//Port: "3306",
+		//// Host:     "eq315cb2945.vicp.fun", //这里使用的是内网穿透的地址
+		//// Port:     "40148",
+		//// Username: "root",
+		//// Password: "admin123",
+		//// Username: "adminAll",
+		//// Password: "123456",
+		//Username: "macOS",
+		//Password: "admin123",
+		Host:     "118.89.198.69",
+		Port:     "3306",
+		Username: "root",
+		Password: "123456",
+		Database: "FsChat",
+		//Database: "goGin",
+		Charset: "utf8",
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		configMySql.Username,
@@ -63,7 +68,7 @@ func InitDB() *gorm.DB {
 	//这个是gorm自动创建数据表的函数。它会自动在数据库中创建一个名为users的数据表
 	_ = db.AutoMigrate(&system.SysUser{}, &demo.SysDemo{},
 		&system.SysWxUser{}, &system.SysWxFriends{},
-		&system.SysConversation{}, &system.SysConversationMember{}, &system.SysMessage{}, &system.SysMessageStatus{},
+		&system.SysConversations{}, &system.SysConversationMembers{}, &system.SysMessages{}, &system.SysMessageStatus{},
 	) // 可以使用逗号分割 根据表的结构体创建多个表
 	return db
 }

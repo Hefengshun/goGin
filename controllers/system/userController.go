@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"ginDemo/models/common/response"
 	"ginDemo/models/system"
-	"ginDemo/models/system/request"
 	stytemReq "ginDemo/models/system/request"
 	stytemRes "ginDemo/models/system/response"
 	"ginDemo/utils"
@@ -104,7 +103,7 @@ func (u *UserController) WxLogin(c *gin.Context) {
 }
 
 func (u *UserController) UpdateUser(c *gin.Context) {
-	reqUser := new(request.UpdateUser)
+	reqUser := new(stytemReq.UpdateUser)
 	reqUser.UserOpenid = c.PostForm("openid")
 	reqUser.UserName = c.PostForm("userName")
 

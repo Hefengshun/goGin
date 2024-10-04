@@ -152,10 +152,47 @@ func (_this *UserService) WxAddFriends(userOpenid string, friendOpenid string) (
 }
 
 func (_this *UserService) GetUserFriends(userOpenid string, friendStatus string) (friendList []system.SysWxFriends, err error) {
-	err = global.DB.Where("user_openid = ? AND status = ?", userOpenid, friendStatus).Find(&friendList).Error
+	err = global.DB.Where("(user_openid = ? OR friend_openid = ?) AND status = ?", userOpenid, userOpenid, friendStatus).Find(&friendList).Error
 	if err != nil {
 		return nil, err
 	}
+
+	// 收集所有需要查询的 openid
+	openidSet := make(map[string]bool)
+	for _, friend := range friendList {
+		if friend.FriendOpenid == userOpenid {
+			openidSet[friend.UserOpenid] = true
+		}
+	}
+
+	// 将 openid 转换为切片
+	var openids []string
+	for openid := range openidSet {
+		openids = append(openids, openid)
+	}
+
+	// 批量查询用户信息
+	var users []system.SysWxUser
+	err = global.DB.Where("openid IN (?)", openids).Find(&users).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 创建一个映射以便快速查找用户名称
+	userMap := make(map[string]string)
+	for _, user := range users {
+		userMap[user.Openid] = user.UserName
+	}
+
+	// 更新 friendList 中的 FriendName
+	for i, friend := range friendList {
+		if friend.FriendOpenid == userOpenid {
+			if userName, exists := userMap[friend.UserOpenid]; exists {
+				friendList[i].FriendName = userName
+			}
+		}
+	}
+
 	return friendList, nil
 }
 

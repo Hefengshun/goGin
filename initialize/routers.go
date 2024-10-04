@@ -11,7 +11,7 @@ func InitRouters() {
 	//**** 中间件如果使用了携程 多线程 go XXX 里面的c *gin.Context 要拷贝使用
 	global.GinServer.Use(middlewares.Cors())
 	global.GinServer.Use(middlewares.HandleRouter)
-	global.GinServer.Use(middlewares.JWTAuth())
+	global.GinServer.Use(middlewares.JWTAuth()) //注册了鉴权中间键
 
 	//routers.DemoRouter(global.GinServer)
 	//routers.UserRouter(global.GinServer)
@@ -24,5 +24,6 @@ func InitRouters() {
 	cesRouter.InitDemoRouter(global.GinServer)
 	cesRouter.InitSqlDemo(global.GinServer)
 	systemRouter.InitUploadRouter(global.GinServer)
+	systemRouter.InitMassageRouter(global.GinServer)
 	systemRouter.InitUserRouter(global.GinServer)
 }
