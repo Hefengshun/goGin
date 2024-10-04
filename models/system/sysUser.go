@@ -14,7 +14,7 @@ type SysUser struct {
 	Password string    `json:"-"  gorm:"comment:用户登录密码"`
 }
 
-// 这里不能更改这个结构体 （数据库表）所有不带指针 TableName 方法本质上是一个只读操作 返回表明
+// TableName 这里不能更改这个结构体 （数据库表）所有不带指针 TableName 方法本质上是一个只读操作 返回表明
 func (SysUser) TableName() string {
 	return "sys_users"
 }

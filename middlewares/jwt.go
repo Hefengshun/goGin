@@ -10,8 +10,11 @@ import (
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		for i := range utils.NoVerify {
-			fmt.Println(utils.NoVerify[i], c.Request.RequestURI)
-			if utils.NoVerify[i] == c.Request.RequestURI {
+			fmt.Println(utils.NoVerify[i], c.Request.URL.Path)
+			// 将路径和预定义路径都转换为小写
+			if strings.ToLower(utils.NoVerify[i]) == strings.ToLower(c.Request.URL.Path) {
+				//if utils.NoVerify[i] == c.Request.URL.Path {
+				c.Next()
 				return
 			}
 		}

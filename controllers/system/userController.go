@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"ginDemo/models/common/response"
 	"ginDemo/models/system"
+	"ginDemo/models/system/request"
 	stytemReq "ginDemo/models/system/request"
 	stytemRes "ginDemo/models/system/response"
 	"ginDemo/utils"
@@ -31,7 +32,7 @@ import (
 
 type UserController struct{}
 
-func (_this *UserController) SignUp(c *gin.Context) {
+func (u *UserController) SignUp(c *gin.Context) {
 	var l stytemReq.SignUp
 	err := c.ShouldBindJSON(&l)
 	if err != nil {
@@ -54,7 +55,7 @@ func (_this *UserController) SignUp(c *gin.Context) {
 	}
 }
 
-func (_this *UserController) Login(c *gin.Context) {
+func (u *UserController) Login(c *gin.Context) {
 	var reqUser stytemReq.Login
 	if err := c.ShouldBind(&reqUser); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -85,8 +86,70 @@ func (_this *UserController) Login(c *gin.Context) {
 	response.OkWithDetailed(returnUserInfo, "登录成功！", c)
 }
 
-func (_this *UserController) Logout(c *gin.Context) {
+func (u *UserController) Logout(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Logout User",
 	})
+}
+
+func (u *UserController) WxLogin(c *gin.Context) {
+	var code = c.PostForm("code")
+
+	userInter, err := userService.WxLogin(code)
+	if err != nil {
+		response.FailWithMessage("cod过程发生错误", c)
+		return
+	}
+	response.OkWithDetailed(userInter, "登录成功！", c)
+}
+
+func (u *UserController) UpdateUser(c *gin.Context) {
+	reqUser := new(request.UpdateUser)
+	reqUser.UserOpenid = c.PostForm("openid")
+	reqUser.UserName = c.PostForm("userName")
+
+	//c.ShouldBind(&reqUser)
+	msg, err := userService.UpdateUser(*reqUser)
+	if err != nil {
+		response.FailWithMessage(msg, c)
+	}
+	response.OkWithDetailed(map[string]int{}, msg, c)
+}
+
+func (u *UserController) WxAddFriends(c *gin.Context) {
+	userOpenid := c.PostForm("openid")
+	friendOpenid := c.PostForm("friendOpenid")
+
+	msg, err := userService.WxAddFriends(userOpenid, friendOpenid)
+	if err != nil {
+		response.FailWithMessage(msg, c)
+		return
+	}
+	response.OkWithDetailed(map[string]int{}, msg, c)
+
+}
+
+func (u *UserController) WxGetUserInfo(c *gin.Context) {}
+
+func (u *UserController) GetUserFriends(c *gin.Context) {
+	userOpenid := c.PostForm("openid")
+	friendStatus := c.PostForm("friendStatus")
+
+	friendsList, err := userService.GetUserFriends(userOpenid, friendStatus)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(friendsList, "朋友列表", c)
+}
+
+func (u *UserController) HandleFriendApply(c *gin.Context) {
+	id := c.Query("id")
+	status := c.Query("status")
+	massage, err := userService.HandleFriendApply(id, status)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(map[string]string{}, massage, c)
 }

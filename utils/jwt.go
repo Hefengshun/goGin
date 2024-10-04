@@ -8,7 +8,8 @@ import (
 
 // 定义秘钥
 var jwtKey = []byte("123456")
-var NoVerify = []interface{}{"/api/login", "/api/signup"}
+var NoVerify = []string{"/api/login", "/api/signup", "/api/wxLogin", "/api/wxAddFriends",
+	"/api/getUserFriends", "/api/updateUser", "/api/handleFriendApply"}
 
 type Claims struct {
 	UserId   uint
@@ -16,7 +17,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// 登录成功之后发放token
+// ReleaseToken 登录成功之后发放token
 func ReleaseToken(user system.SysUser) (string, error) {
 	expirationTime := time.Now().Add(3 * time.Minute) //token的有效期是3分钟
 	claims := &Claims{
@@ -25,7 +26,7 @@ func ReleaseToken(user system.SysUser) (string, error) {
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(), //token的有效期
 			IssuedAt:  time.Now().Unix(),     //token发放的时间
-			Issuer:    "chengqiang",          //作者
+			Issuer:    "HFS",                 //作者
 			Subject:   "user token",          //主题
 		},
 	}
@@ -46,7 +47,7 @@ func ReleaseToken(user system.SysUser) (string, error) {
 //1.加密协议、2.荷载（程序信息Claims）、前面两部分+自定义密匙组成的一个哈希值 3.密钥
 //使用base64解密保存的信息(分三段进行解密) ：  echo eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 | base64 -D
 
-// 解析从前端获取到的token值
+// ParseToken 解析从前端获取到的token值
 func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
