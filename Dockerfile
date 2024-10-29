@@ -17,8 +17,8 @@ COPY . .
 RUN go build -gcflags "all=-N -l" -o main .
 
 # Expose ports for the app and the debugger
-EXPOSE 8088
-ENV PORT 8088
+EXPOSE 8089
+ENV PORT 8089
 
 # Command to run the executable
 CMD ["./main"]

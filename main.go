@@ -11,7 +11,7 @@ import (
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8088" // Default port if not specified
+		port = "8089" // Default port if not specified
 	}
 
 	global.DB = initialize.InitDB()

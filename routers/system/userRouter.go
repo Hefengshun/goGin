@@ -20,6 +20,7 @@ func (_this *UserRouter) InitUserRouter(ginServer *gin.Engine) {
 		userRouter.POST("/login", userController.Login)
 		userRouter.POST("/wxLogin", userController.WxLogin)
 		userRouter.POST("/wxAddFriends", userController.WxAddFriends)
+		userRouter.POST("/wxGetUserInfo", userController.WxGetUserInfo)
 		userRouter.POST("/getUserFriends", userController.GetUserFriends)
 		userRouter.POST("/updateUser", userController.UpdateUser)
 		userRouter.GET("/handleFriendApply", userController.HandleFriendApply)

@@ -115,38 +115,45 @@ func (_this *UserService) UpdateUser(reqUser request.UpdateUser) (message string
 	return "修改成功", nil
 }
 
+func (_this *UserService) WxGetUserInfo(userOpenid string) (userInfo *system.SysWxUser, err error) {
+
+	err = global.DB.Where(`openid = ?`, userOpenid).First(&userInfo).Error
+	if err != nil {
+		return nil, err
+	}
+	if userInfo.Openid == "" {
+		return nil, nil
+	}
+
+	return userInfo, nil
+}
+
 func (_this *UserService) WxAddFriends(userOpenid string, friendOpenid string) (msg string, err error) {
 	var user system.SysWxUser
-	// 先去重用户表里面找是是否纯在查找用户
-	err = global.DB.Where("openid = ?", friendOpenid).First(&user).Error
+
+	var friendData system.SysWxFriends
+	err = global.DB.Where("user_openid = ? AND friend_openid = ?", userOpenid, friendOpenid).First(&friendData).Error
+	// 则判断朋友表里是否有这条数据
 	if err != nil {
-		return "未查找到该用户！", err
-	} else {
-		// 如果查找到
-		var friendData system.SysWxFriends
-		err = global.DB.Where("user_openid = ? AND friend_openid = ?", userOpenid, friendOpenid).First(&friendData).Error
-		// 则判断朋友表里是否有这条数据
-		if err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				//没有则往朋友表里面添加一条数据
-				var wxFriend = system.SysWxFriends{
-					UserOpenid:   userOpenid,
-					FriendOpenid: friendOpenid, //找到朋友id添加
-					FriendName:   user.UserName,
-					Status:       "pending",
-				}
-				if err := global.DB.Create(&wxFriend).Error; err != nil {
-					// 处理插入错误
-					return "数据添加失败了！", err
-				}
-				return "请求已发送！", nil
-			} else {
-				// 处理其他数据库错误
-				return "数据库错误！", err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			//没有则往朋友表里面添加一条数据
+			var wxFriend = system.SysWxFriends{
+				UserOpenid:   userOpenid,
+				FriendOpenid: friendOpenid, //找到朋友id添加
+				FriendName:   user.UserName,
+				Status:       "pending",
 			}
+			if err := global.DB.Create(&wxFriend).Error; err != nil {
+				// 处理插入错误
+				return "数据添加失败了！", err
+			}
+			return "请求已发送！", nil
 		} else {
-			return "请求已发送，请耐心等候！", nil
+			// 处理其他数据库错误
+			return "数据库错误！", err
 		}
+	} else {
+		return "请求已发送，请耐心等候！", nil
 	}
 
 }

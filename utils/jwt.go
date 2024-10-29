@@ -8,7 +8,7 @@ import (
 
 // 定义秘钥
 var jwtKey = []byte("123456")
-var NoVerify = []string{"/api/login", "/api/signup", "/api/wxLogin", "/api/wxAddFriends",
+var NoVerify = []string{"/api/login", "/api/signup", "/api/wxLogin", "/api/wxGetUserInfo", "/api/wxAddFriends",
 	"/api/getUserFriends", "/api/updateUser", "/api/handleFriendApply",
 	"/massage/createConversation", "/massage/sendMessage", "/massage/getMessagesForConversation", "/massage/getConversationsWithUnreadCount",
 }

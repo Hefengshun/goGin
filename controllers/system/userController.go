@@ -91,17 +91,19 @@ func (u *UserController) Logout(c *gin.Context) {
 	})
 }
 
+// WxLogin 登录获取code创建用户
 func (u *UserController) WxLogin(c *gin.Context) {
 	var code = c.PostForm("code")
 
 	userInter, err := userService.WxLogin(code)
 	if err != nil {
-		response.FailWithMessage("cod过程发生错误", c)
+		response.FailWithMessage("code过程发生错误", c)
 		return
 	}
 	response.OkWithDetailed(userInter, "登录成功！", c)
 }
 
+// UpdateUser 用户信息更新
 func (u *UserController) UpdateUser(c *gin.Context) {
 	reqUser := new(stytemReq.UpdateUser)
 	reqUser.UserOpenid = c.PostForm("openid")
@@ -115,6 +117,22 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	response.OkWithDetailed(map[string]int{}, msg, c)
 }
 
+// WxGetUserInfo 获取查找用户的信息
+func (u *UserController) WxGetUserInfo(c *gin.Context) {
+	userOpenid := c.PostForm("userOpenid")
+
+	userInfo, err := userService.WxGetUserInfo(userOpenid)
+
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	response.OkWithDetailed(userInfo, "查到用户信息！", c)
+
+}
+
+// WxAddFriends 添加好友
 func (u *UserController) WxAddFriends(c *gin.Context) {
 	userOpenid := c.PostForm("openid")
 	friendOpenid := c.PostForm("friendOpenid")
@@ -128,8 +146,7 @@ func (u *UserController) WxAddFriends(c *gin.Context) {
 
 }
 
-func (u *UserController) WxGetUserInfo(c *gin.Context) {}
-
+// GetUserFriends 获取当前用户的好友
 func (u *UserController) GetUserFriends(c *gin.Context) {
 	userOpenid := c.PostForm("openid")
 	friendStatus := c.PostForm("friendStatus")
@@ -142,6 +159,7 @@ func (u *UserController) GetUserFriends(c *gin.Context) {
 	response.OkWithDetailed(friendsList, "朋友列表", c)
 }
 
+// HandleFriendApply 操作好友申请
 func (u *UserController) HandleFriendApply(c *gin.Context) {
 	id := c.Query("id")
 	status := c.Query("status")
